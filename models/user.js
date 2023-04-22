@@ -3,28 +3,39 @@ const handleMongooseError = require("../helpers/handleMongooseError");
 
 const emailRegexp = /^\S+@\S+\.\S+$/;
 
-const userSchema = new Schema({
-  password: {
-    type: String,
-    required: [true, "Set password for user"],
+const userSchema = new Schema(
+  {
+    password: {
+      type: String,
+      required: [true, "Set password for user"],
+    },
+    email: {
+      type: String,
+      match: emailRegexp,
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: String,
+    avatarURL: {
+      type: String,
+      require: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
-  email: {
-    type: String,
-    match: emailRegexp,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
-  },
-  token: String,
-  avatarURL: {
-    type: String,
-    require: true,
-  }
-},{versionKey: false, timestamps: true});
+  { versionKey: false, timestamps: true }
+);
 
 userSchema.post('save', handleMongooseError);
 

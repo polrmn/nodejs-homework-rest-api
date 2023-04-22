@@ -8,6 +8,8 @@ const {
   getCurrent,
   logout,
   updateAvatar,
+  verifyEmail,
+  resendEmail,
 } = require("../../controllers/auth");
 const authenticate = require('../../middlewares/authenticate');
 const upload = require('../../middlewares/upload');
@@ -23,6 +25,10 @@ router.get('/current', authenticate, getCurrent);
 router.post('/logout', authenticate, logout)
 
 router.patch("/avatar", authenticate, upload.single("avatar"), updateAvatar);
+
+router.get("/verify/:verificationToken", verifyEmail);
+
+router.post("/verify", validateBody(schemas.verifySchema), resendEmail);
 
 
 
